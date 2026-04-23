@@ -364,9 +364,9 @@ export default function ReservationLandingPage() {
           </div>
 
           <h1 className="mt-6 text-4xl font-bold leading-tight tracking-tight sm:text-5xl md:text-6xl">
-            필요한 시간만,
+            필요한 시간과 필요한 공간만
             <br />
-            빠르고 부드럽게 예약하세요
+            빠르게 예약하세요
           </h1>
 
           <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-white/70 sm:text-base">
@@ -378,7 +378,7 @@ export default function ReservationLandingPage() {
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Pill icon={<CalendarDays className="h-4 w-4" />}>1시간 단위 예약</Pill>
             <Pill icon={<MapPin className="h-4 w-4" />}>회의실 3개 운영</Pill>
-            <Pill icon={<MoonStar className="h-4 w-4" />}>모바일 친화형 화면</Pill>
+            <Pill icon={<MoonStar className="h-4 w-4" />}>선착순 예약 필수</Pill>
           </div>
         </header>
 
