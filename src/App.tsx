@@ -1,15 +1,24 @@
 import { useMemo, useState } from "react";
-import { CalendarDays, Clock3, Loader2, MapPin, Phone, ShieldCheck, UserRound } from "lucide-react";
+import {
+  CalendarDays,
+  CheckCircle2,
+  Clock3,
+  Loader2,
+  MapPin,
+  Phone,
+  ShieldCheck,
+  UserRound,
+} from "lucide-react";
 
 const API_BASE_URL =
-  "https://script.google.com/macros/s/AKfycbyn0a8R4JH8JDCENrFpjsG2jQ1WTaZZzDNzgTqp6-bcM843ZWp-bdFbzn_tOthHk-Rz/exec";
+  "https://script.google.com/macros/s/AKfycbynuOiLCCfhGo7jDpqlhDM2S0CXEujm78uR1x5-CNVofUOgoEM_MpPEqVLgm_abOIO8/exec";
 
 const ADMIN_PHONE = "01029733421";
 
 const SPACES = [
-  { id: "room-1", name: "회의실 1", capacity: "최대 12명", desc: "팀 회의, 교육, 모임 운영에 적합" },
-  { id: "room-2", name: "회의실 2", capacity: "최대 8명", desc: "소규모 회의, 상담, 인터뷰에 적합" },
-  { id: "room-3", name: "회의실 3", capacity: "최대 8명", desc: "집중 회의, 스터디, 간단한 워크숍에 적합" },
+  { id: "room-1", name: "회의실 1", capacity: "최대 12명", desc: "팀 회의, 교육, 모임 운영" },
+  { id: "room-2", name: "회의실 2", capacity: "최대 8명", desc: "소규모 회의, 상담, 인터뷰" },
+  { id: "room-3", name: "회의실 3", capacity: "최대 8명", desc: "집중 회의, 스터디, 워크숍" },
 ] as const;
 
 const DATES = [
@@ -299,6 +308,7 @@ export default function ReservationLandingPage() {
       time: target.time,
     });
     setMessage(isAdmin ? "관리자 수정 모드입니다." : "내 예약 수정 모드입니다.");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   async function handleDelete(id: string) {
@@ -340,465 +350,385 @@ export default function ReservationLandingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-neutral-50 via-white to-neutral-100 text-neutral-900">
-      <section className="border-b border-neutral-200 bg-white/90 backdrop-blur">
-        <div className="mx-auto max-w-7xl px-5 py-12 md:px-10 md:py-16">
-          <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+    <div className="min-h-screen bg-[#f7f8f5] text-neutral-900">
+      <section className="border-b border-emerald-100 bg-gradient-to-b from-[#eef8f0] to-white">
+        <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 md:py-12">
+          <div className="grid gap-5 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
             <div>
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1.5 text-sm font-medium text-emerald-700">
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white px-3 py-1.5 text-xs font-semibold text-emerald-700 shadow-sm sm:text-sm">
                 <ShieldCheck className="h-4 w-4" />
                 청년동 회의실 예약
               </div>
-              <h1 className="text-4xl font-bold leading-tight tracking-tight md:text-6xl">
-                쉽고 빠르게 확인하고,
+              <h1 className="text-3xl font-black leading-tight tracking-tight text-neutral-900 sm:text-4xl md:text-5xl">
+                필요한 시간만,
                 <br />
-                바로 예약하는 회의실 신청
+                빠르게 예약하세요
               </h1>
-              <p className="mt-5 max-w-2xl text-base leading-7 text-neutral-600 md:text-lg">
-                2026년 5월 10일 일요일부터 5월 15일 금요일까지 예약을 받고 있습니다. 일요일은 10:00~17:00,
-                월~금은 10:00~21:00까지 1시간 단위로 이용할 수 있으며, 운영 기간 중 1인 1회만 예약 가능합니다.
+              <p className="mt-4 max-w-2xl text-sm leading-6 text-neutral-600 sm:text-base">
+                5월 10일부터 5월 15일까지 회의실 예약을 받습니다. 일요일은 10:00~17:00, 월~금은 10:00~21:00 운영이며, 운영 기간 중 1인 1회만 신청할 수 있습니다.
               </p>
-              <div className="mt-7 flex flex-wrap gap-3 text-sm text-neutral-600">
-                <Badge>회의실 1 최대 12명</Badge>
-                <Badge>회의실 2 최대 8명</Badge>
-                <Badge>회의실 3 최대 8명</Badge>
-                <Badge>전화번호 기반 본인 확인</Badge>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <Pill>전화번호 본인 확인</Pill>
+                <Pill>1시간 단위 예약</Pill>
+                <Pill>운영 기간 1회 제한</Pill>
               </div>
             </div>
 
-            <div className="rounded-[28px] border border-neutral-200 bg-white p-5 shadow-xl shadow-neutral-200/40">
-              <div className="grid gap-4 sm:grid-cols-3">
-                <StatCard label="운영 공간" value={`${SPACES.length}개`} icon={<MapPin className="h-4 w-4" />} />
-                <StatCard label="예약 기간" value="6일" icon={<CalendarDays className="h-4 w-4" />} />
-                <StatCard label="운영 단위" value="1시간" icon={<Clock3 className="h-4 w-4" />} />
+            <div className="rounded-[28px] border border-emerald-100 bg-white p-4 shadow-lg shadow-emerald-100/40 sm:p-5">
+              <div className="grid grid-cols-3 gap-3">
+                <QuickStat label="공간" value={`${SPACES.length}개`} />
+                <QuickStat label="기간" value="6일" />
+                <QuickStat label="단위" value="1시간" />
               </div>
-              <div className="mt-4 rounded-2xl border border-dashed border-emerald-200 bg-emerald-50 p-4 text-sm leading-6 text-emerald-800">
-                등록된 이용자 명단과 이름·전화번호가 일치해야 예약할 수 있습니다. 다른 이용자의 상세 연락처는 보이지 않으며, 내 예약만 별도 목록에서 확인할 수 있습니다.
+              <div className="mt-4 rounded-2xl bg-emerald-50 px-4 py-4 text-sm leading-6 text-emerald-900">
+                등록된 이용자만 예약 가능하며, 다른 이용자의 상세 연락처는 보이지 않습니다. 내 예약만 별도로 확인할 수 있습니다.
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-7xl gap-8 px-5 py-10 md:px-10 xl:grid-cols-[1.05fr_0.95fr]">
-        <div className="space-y-8">
-          <div className="rounded-[28px] border border-neutral-200 bg-white p-6 shadow-sm">
-            <div className="mb-6 flex items-start justify-between gap-4">
-              <div>
-                <p className="text-sm font-semibold text-emerald-700">Step 1</p>
-                <h2 className="mt-1 text-2xl font-bold tracking-tight">예약자 정보 확인</h2>
-                <p className="mt-2 text-sm leading-6 text-neutral-600">
-                  등록된 이용자만 이름과 전화번호로 본인 확인 후 예약할 수 있습니다. 관리자 번호로 접속하면 관리자 화면을 열 수 있습니다. 미리보기 환경에서는 네트워크 권한 팝업이 반복될 수 있어, 아래 버튼으로 직접 연결하는 방식으로 동작합니다.
-                </p>
+      <section className="mx-auto max-w-6xl px-4 py-6 sm:px-6 md:py-8">
+        <div className="grid gap-6 xl:grid-cols-[1.03fr_0.97fr]">
+          <div className="space-y-6">
+            <CardShell>
+              <SectionHead
+                step="Step 1"
+                title="예약자 정보 확인"
+                description="이름과 전화번호를 입력하고 본인 확인을 완료해 주세요. 관리자 번호로 접속하면 관리자 화면을 열 수 있습니다."
+                side={
+                  <StatusChip>
+                    {isAdmin ? "관리자 가능" : activeUser.isVerified ? "본인 확인 완료" : "일반 예약자"}
+                  </StatusChip>
+                }
+              />
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field label="이름" icon={<UserRound className="h-4 w-4" />}>
+                  <input
+                    value={form.name}
+                    onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
+                    className="w-full rounded-2xl border border-neutral-300 bg-white px-4 py-3.5 text-sm outline-none transition focus:border-emerald-500"
+                    placeholder="이름을 입력해 주세요"
+                  />
+                </Field>
+
+                <Field label="전화번호" icon={<Phone className="h-4 w-4" />}>
+                  <input
+                    value={form.phone}
+                    onChange={(e) => setForm((prev) => ({ ...prev, phone: onlyDigits(e.target.value) }))}
+                    className="w-full rounded-2xl border border-neutral-300 bg-white px-4 py-3.5 text-sm outline-none transition focus:border-emerald-500"
+                    placeholder="숫자만 입력해 주세요"
+                    maxLength={11}
+                  />
+                </Field>
+
+                <div className="sm:col-span-2 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  <PrimaryButton type="button" onClick={() => void handleIdentityApply()} disabled={isSubmitting}>
+                    {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+                    내 정보 적용
+                  </PrimaryButton>
+
+                  <SecondaryButton type="button" onClick={() => void loadReservations()} disabled={isLoadingReservations}>
+                    {isLoadingReservations ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+                    예약 현황 불러오기
+                  </SecondaryButton>
+
+                  {isAdmin && (
+                    <SecondaryButton
+                      type="button"
+                      onClick={() => setViewMode((prev) => (prev === "admin" ? "user" : "admin"))}
+                      className="sm:col-span-2 lg:col-span-1 border-emerald-200 bg-emerald-50 text-emerald-800"
+                    >
+                      {showAdminPanel ? "예약자 화면으로 보기" : "관리자 화면 열기"}
+                    </SecondaryButton>
+                  )}
+                </div>
               </div>
-              <div className="rounded-2xl bg-neutral-100 px-4 py-2 text-sm text-neutral-700">
-                현재 상태: <span className="font-semibold">{isAdmin ? "관리자 가능" : activeUser.isVerified ? "본인 확인 완료" : "일반 예약자"}</span>
-              </div>
-            </div>
+            </CardShell>
 
-            <div className="grid gap-5 md:grid-cols-2">
-              <Field label="이름" icon={<UserRound className="h-4 w-4" />}>
-                <input
-                  value={form.name}
-                  onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
-                  className="w-full rounded-2xl border border-neutral-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-neutral-900"
-                  placeholder="이름을 입력해 주세요"
-                />
-              </Field>
+            <CardShell>
+              <SectionHead
+                step="Step 2"
+                title="예약 신청"
+                description="공간, 날짜, 시간을 차례대로 선택해 주세요. 이미 예약된 시간은 선택할 수 없습니다."
+                side={<StatusChip>선택 공간: {currentSpace?.name}</StatusChip>}
+              />
 
-              <Field label="전화번호" icon={<Phone className="h-4 w-4" />}>
-                <input
-                  value={form.phone}
-                  onChange={(e) => setForm((prev) => ({ ...prev, phone: onlyDigits(e.target.value) }))}
-                  className="w-full rounded-2xl border border-neutral-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-neutral-900"
-                  placeholder="숫자만 입력해 주세요"
-                  maxLength={11}
-                />
-              </Field>
-
-              <div className="md:col-span-2 flex flex-wrap items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => void handleIdentityApply()}
-                  disabled={isSubmitting}
-                  className="inline-flex items-center gap-2 rounded-2xl bg-neutral-900 px-6 py-3 text-sm font-semibold text-white disabled:opacity-60"
-                >
-                  {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-                  내 정보 적용
-                </button>
-                <button
-                  type="button"
-                  onClick={() => void loadReservations()}
-                  disabled={isLoadingReservations}
-                  className="inline-flex items-center gap-2 rounded-2xl border border-neutral-300 bg-white px-6 py-3 text-sm font-semibold text-neutral-800 disabled:opacity-60"
-                >
-                  {isLoadingReservations ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-                  예약 현황 불러오기
-                </button>
-                {isAdmin && (
-                  <button
-                    type="button"
-                    onClick={() => setViewMode((prev) => (prev === "admin" ? "user" : "admin"))}
-                    className="rounded-2xl border border-emerald-300 bg-emerald-50 px-6 py-3 text-sm font-semibold text-emerald-800"
+              <form onSubmit={(e) => void handleSubmit(e)} className="grid gap-4 sm:grid-cols-2">
+                <Field label="공간 선택" icon={<MapPin className="h-4 w-4" />}>
+                  <select
+                    value={form.spaceId}
+                    onChange={(e) =>
+                      setForm((prev) => ({
+                        ...prev,
+                        spaceId: e.target.value,
+                        time: getTimeSlotsForDate(prev.date)[0],
+                      }))
+                    }
+                    className="w-full rounded-2xl border border-neutral-300 bg-white px-4 py-3.5 text-sm outline-none transition focus:border-emerald-500"
                   >
-                    {showAdminPanel ? "예약자 화면으로 보기" : "관리자 화면 열기"}
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
+                    {SPACES.map((space) => (
+                      <option key={space.id} value={space.id}>
+                        {space.name} · {space.capacity}
+                      </option>
+                    ))}
+                  </select>
+                </Field>
 
-          <div className="rounded-[28px] border border-neutral-200 bg-white p-6 shadow-sm">
-            <div className="mb-6 flex items-start justify-between gap-4">
-              <div>
-                <p className="text-sm font-semibold text-emerald-700">Step 2</p>
-                <h2 className="mt-1 text-2xl font-bold tracking-tight">예약 신청</h2>
-                <p className="mt-2 text-sm leading-6 text-neutral-600">
-                  이미 선점된 시간은 선택할 수 없습니다. 전화번호 기준으로 운영 기간 전체에서 한 번만 예약할 수 있습니다. 먼저 예약 현황을 불러온 뒤 신청해 주세요.
-                </p>
-              </div>
-              <div className="rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-2 text-sm text-neutral-700">
-                선택 공간: <span className="font-semibold">{currentSpace?.name}</span>
-              </div>
-            </div>
+                <Field label="날짜 선택" icon={<CalendarDays className="h-4 w-4" />}>
+                  <select
+                    value={form.date}
+                    onChange={(e) => {
+                      const nextDate = e.target.value;
+                      const nextSlots = getTimeSlotsForDate(nextDate);
+                      setForm((prev) => ({ ...prev, date: nextDate, time: nextSlots[0] }));
+                    }}
+                    className="w-full rounded-2xl border border-neutral-300 bg-white px-4 py-3.5 text-sm outline-none transition focus:border-emerald-500"
+                  >
+                    {DATES.map((date) => (
+                      <option key={date} value={date}>
+                        {formatDate(date)}
+                      </option>
+                    ))}
+                  </select>
+                </Field>
 
-            <form onSubmit={(e) => void handleSubmit(e)} className="grid gap-5 md:grid-cols-2">
-              <Field label="공간 선택" icon={<MapPin className="h-4 w-4" />}>
-                <select
-                  value={form.spaceId}
-                  onChange={(e) =>
-                    setForm((prev) => ({
-                      ...prev,
-                      spaceId: e.target.value,
-                      time: getTimeSlotsForDate(prev.date)[0],
-                    }))
-                  }
-                  className="w-full rounded-2xl border border-neutral-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-neutral-900"
-                >
-                  {SPACES.map((space) => (
-                    <option key={space.id} value={space.id}>
-                      {space.name} · {space.capacity}
-                    </option>
-                  ))}
-                </select>
-              </Field>
-
-              <Field label="날짜 선택" icon={<CalendarDays className="h-4 w-4" />}>
-                <select
-                  value={form.date}
-                  onChange={(e) => {
-                    const nextDate = e.target.value;
-                    const nextSlots = getTimeSlotsForDate(nextDate);
-                    setForm((prev) => ({ ...prev, date: nextDate, time: nextSlots[0] }));
-                  }}
-                  className="w-full rounded-2xl border border-neutral-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-neutral-900"
-                >
-                  {DATES.map((date) => (
-                    <option key={date} value={date}>
-                      {formatDate(date)}
-                    </option>
-                  ))}
-                </select>
-              </Field>
-
-              <div className="md:col-span-2">
-                <label className="mb-3 flex items-center gap-2 text-sm font-semibold text-neutral-800">
-                  <Clock3 className="h-4 w-4" />
-                  시간 선택
-                </label>
-                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                  {availableTimes.map(({ slot, taken, found }) => {
-                    const selected = form.time === slot;
-                    return (
-                      <button
-                        key={slot}
-                        type="button"
-                        disabled={taken}
-                        onClick={() => setForm((prev) => ({ ...prev, time: slot }))}
-                        className={`rounded-2xl border px-4 py-3 text-left text-sm font-medium transition ${
-                          taken
-                            ? "cursor-not-allowed border-neutral-200 bg-neutral-100 text-neutral-400"
-                            : selected
-                              ? "border-neutral-900 bg-neutral-900 text-white"
-                              : "border-neutral-300 bg-white text-neutral-800 hover:border-neutral-900"
-                        }`}
-                      >
-                        <div>{slot}</div>
-                        <div className="mt-1 text-[11px] font-normal">
-                          {taken ? "선점 완료" : selected ? "선택됨" : "예약 가능"}
-                        </div>
-                        {taken && found && (
-                          <div className="mt-1 text-[11px] font-normal">
-                            {showAdminPanel ? `${found.name} 예약` : `${maskName(found.name)} 예약`}
+                <div className="sm:col-span-2">
+                  <label className="mb-3 flex items-center gap-2 text-sm font-semibold text-neutral-800">
+                    <Clock3 className="h-4 w-4" />
+                    시간 선택
+                  </label>
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+                    {availableTimes.map(({ slot, taken, found }) => {
+                      const selected = form.time === slot;
+                      return (
+                        <button
+                          key={slot}
+                          type="button"
+                          disabled={taken}
+                          onClick={() => setForm((prev) => ({ ...prev, time: slot }))}
+                          className={`min-h-[86px] rounded-2xl border px-3 py-3 text-left text-sm font-semibold transition ${
+                            taken
+                              ? "cursor-not-allowed border-neutral-200 bg-neutral-100 text-neutral-400"
+                              : selected
+                                ? "border-emerald-700 bg-emerald-600 text-white shadow-md shadow-emerald-200"
+                                : "border-neutral-300 bg-white text-neutral-800 hover:border-emerald-400"
+                          }`}
+                        >
+                          <div>{slot}</div>
+                          <div className="mt-1 text-[11px] font-medium opacity-90">
+                            {taken ? "선점 완료" : selected ? "선택됨" : "예약 가능"}
                           </div>
-                        )}
-                      </button>
+                          {taken && found && (
+                            <div className="mt-1 text-[11px] font-normal opacity-90">
+                              {showAdminPanel ? `${found.name} 예약` : `${maskName(found.name)} 예약`}
+                            </div>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="sm:col-span-2 flex flex-col gap-3 pt-2 sm:flex-row sm:flex-wrap sm:items-center">
+                  <PrimaryButton type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+                    {selectedReservation ? "예약 수정 저장" : "예약 신청하기"}
+                  </PrimaryButton>
+
+                  {selectedReservation && (
+                    <SecondaryButton
+                      type="button"
+                      onClick={() => {
+                        setSelectedReservationId(null);
+                        setMessage("수정 모드를 취소했습니다.");
+                      }}
+                    >
+                      취소
+                    </SecondaryButton>
+                  )}
+
+                  {message && (
+                    <div className="flex items-center gap-2 rounded-2xl bg-neutral-100 px-4 py-3 text-sm text-neutral-700">
+                      <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                      {message}
+                    </div>
+                  )}
+                </div>
+              </form>
+            </CardShell>
+
+            <CardShell>
+              <SectionHead
+                step="Step 3"
+                title="현재 예약 현황"
+                description={`${currentSpace?.name} · ${formatDate(form.date)}`}
+              />
+
+              {isLoadingReservations ? (
+                <div className="flex items-center gap-2 rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-4 text-sm text-neutral-600">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  예약 현황을 불러오는 중입니다.
+                </div>
+              ) : reservations.length === 0 ? (
+                <div className="rounded-2xl border border-dashed border-neutral-300 bg-neutral-50 px-4 py-5 text-sm text-neutral-500">
+                  아직 불러온 예약 데이터가 없습니다. 상단의 '예약 현황 불러오기' 버튼을 눌러 주세요.
+                </div>
+              ) : (
+                <div className="grid gap-3">
+                  {dateSlots.map((slot) => {
+                    const found = reservations.find(
+                      (item) =>
+                        item.spaceId === form.spaceId &&
+                        item.date === form.date &&
+                        item.time === slot &&
+                        item.status === "예약완료",
+                    );
+                    const isMine = !!found && normalizePhone(found.phone) === activePhone;
+
+                    return (
+                      <div
+                        key={slot}
+                        className={`rounded-2xl border px-4 py-4 ${found ? "border-neutral-200 bg-white" : "border-emerald-200 bg-emerald-50/60"}`}
+                      >
+                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                          <div>
+                            <p className="text-sm font-semibold">{slot}</p>
+                            <p className="mt-1 text-sm text-neutral-600">
+                              {!found
+                                ? "예약 가능"
+                                : showAdminPanel
+                                  ? `${found.name} · ${found.status}`
+                                  : isMine
+                                    ? `내 예약 · ${found.status}`
+                                    : `${maskName(found.name)} · 선점 완료`}
+                            </p>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            {!found && <MiniTag>신청 가능</MiniTag>}
+                            {found && isMine && !showAdminPanel && (
+                              <>
+                                <MiniAction onClick={() => handleEdit(found.id)}>내 예약 수정</MiniAction>
+                                <MiniGhost onClick={() => void handleDelete(found.id)}>내 예약 취소</MiniGhost>
+                              </>
+                            )}
+                            {found && showAdminPanel && (
+                              <>
+                                <MiniAction onClick={() => handleEdit(found.id)}>관리자 수정</MiniAction>
+                                <MiniGhost onClick={() => void handleDelete(found.id)}>삭제</MiniGhost>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      </div>
                     );
                   })}
                 </div>
-              </div>
-
-              <div className="md:col-span-2 flex flex-wrap items-center gap-3 pt-2">
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="inline-flex items-center gap-2 rounded-2xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 disabled:opacity-60"
-                >
-                  {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-                  {selectedReservation ? "예약 수정 저장" : "예약 신청하기"}
-                </button>
-                {selectedReservation && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSelectedReservationId(null);
-                      setMessage("수정 모드를 취소했습니다.");
-                    }}
-                    className="rounded-2xl border border-neutral-300 bg-white px-6 py-3 text-sm font-semibold text-neutral-800"
-                  >
-                    취소
-                  </button>
-                )}
-                {message && (
-                  <div className="rounded-2xl bg-neutral-100 px-4 py-3 text-sm text-neutral-700">
-                    {message}
-                  </div>
-                )}
-              </div>
-            </form>
-          </div>
-
-          <div className="rounded-[28px] border border-neutral-200 bg-white p-6 shadow-sm">
-            <div className="mb-5 flex items-end justify-between gap-4">
-              <div>
-                <p className="text-sm font-semibold text-emerald-700">Step 3</p>
-                <h2 className="mt-1 text-2xl font-bold tracking-tight">현재 예약 현황</h2>
-              </div>
-              <div className="text-sm text-neutral-500">
-                {currentSpace?.name} · {formatDate(form.date)}
-              </div>
-            </div>
-
-            {isLoadingReservations ? (
-              <div className="flex items-center gap-2 rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-4 text-sm text-neutral-600">
-                <Loader2 className="h-4 w-4 animate-spin" />
-                예약 현황을 불러오는 중입니다.
-              </div>
-            ) : reservations.length === 0 ? (
-              <div className="rounded-2xl border border-dashed border-neutral-300 bg-neutral-50 px-4 py-5 text-sm text-neutral-500">
-                아직 불러온 예약 데이터가 없습니다. 상단의 '예약 현황 불러오기' 버튼을 눌러 주세요.
-              </div>
-            ) : (
-              <div className="grid gap-3">
-                {dateSlots.map((slot) => {
-                  const found = reservations.find(
-                    (item) =>
-                      item.spaceId === form.spaceId &&
-                      item.date === form.date &&
-                      item.time === slot &&
-                      item.status === "예약완료",
-                  );
-                  const isMine = !!found && normalizePhone(found.phone) === activePhone;
-                  return (
-                    <div
-                      key={slot}
-                      className={`flex flex-col gap-3 rounded-2xl border px-4 py-4 md:flex-row md:items-center md:justify-between ${
-                        found ? "border-neutral-200 bg-neutral-50" : "border-emerald-200 bg-emerald-50/50"
-                      }`}
-                    >
-                      <div>
-                        <p className="text-sm font-semibold">{slot}</p>
-                        <p className="mt-1 text-sm text-neutral-600">
-                          {!found
-                            ? "예약 가능"
-                            : showAdminPanel
-                              ? `${found.name} · ${found.status}`
-                              : isMine
-                                ? `내 예약 · ${found.status}`
-                                : `${maskName(found.name)} · 선점 완료`}
-                        </p>
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        {!found && (
-                          <span className="rounded-full bg-white px-3 py-1 text-xs font-medium text-emerald-700">
-                            신청 가능
-                          </span>
-                        )}
-                        {found && isMine && !showAdminPanel && (
-                          <>
-                            <button
-                              onClick={() => handleEdit(found.id)}
-                              className="rounded-full bg-neutral-900 px-3 py-1.5 text-xs font-semibold text-white"
-                            >
-                              내 예약 수정
-                            </button>
-                            <button
-                              onClick={() => void handleDelete(found.id)}
-                              className="rounded-full border border-neutral-300 bg-white px-3 py-1.5 text-xs font-semibold text-neutral-700"
-                            >
-                              내 예약 취소
-                            </button>
-                          </>
-                        )}
-                        {found && showAdminPanel && (
-                          <>
-                            <button
-                              onClick={() => handleEdit(found.id)}
-                              className="rounded-full bg-neutral-900 px-3 py-1.5 text-xs font-semibold text-white"
-                            >
-                              관리자 수정
-                            </button>
-                            <button
-                              onClick={() => void handleDelete(found.id)}
-                              className="rounded-full border border-neutral-300 bg-white px-3 py-1.5 text-xs font-semibold text-neutral-700"
-                            >
-                              삭제
-                            </button>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="space-y-8">
-          <div className="rounded-[28px] border border-neutral-200 bg-white p-6 shadow-sm">
-            <p className="text-sm font-semibold text-emerald-700">공간 안내</p>
-            <h2 className="mt-1 text-2xl font-bold tracking-tight">어떤 공간을 예약할 수 있나요?</h2>
-            <p className="mt-2 text-sm leading-6 text-neutral-600">
-              원하는 목적에 맞는 회의실을 선택해 주세요. 공간별 수용 인원을 참고하면 더 편하게 예약할 수 있습니다.
-            </p>
-            <div className="mt-5 grid gap-4">
-              {SPACES.map((space) => (
-                <div
-                  key={space.id}
-                  className={`rounded-2xl border p-4 transition ${
-                    form.spaceId === space.id
-                      ? "border-neutral-900 bg-neutral-900 text-white"
-                      : "border-neutral-200 bg-neutral-50"
-                  }`}
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <p className="text-base font-semibold">{space.name}</p>
-                      <p
-                        className={`mt-1 text-sm ${
-                          form.spaceId === space.id ? "text-neutral-300" : "text-neutral-600"
-                        }`}
-                      >
-                        {space.desc}
-                      </p>
-                    </div>
-                    <span
-                      className={`rounded-full px-3 py-1 text-xs font-medium ${
-                        form.spaceId === space.id ? "bg-white text-neutral-900" : "bg-white text-neutral-700"
-                      }`}
-                    >
-                      {space.capacity}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="rounded-[28px] border border-neutral-200 bg-white p-6 shadow-sm">
-            <div className="mb-5 flex items-end justify-between gap-4">
-              <div>
-                <p className="text-sm font-semibold text-emerald-700">내 예약</p>
-                <h2 className="mt-1 text-2xl font-bold tracking-tight">내가 신청한 예약만 보기</h2>
-              </div>
-              <div className="text-sm text-neutral-500">{formatPhone(activePhone)}</div>
-            </div>
-            <div className="mb-4 rounded-2xl border border-dashed border-neutral-300 bg-neutral-50 px-4 py-4 text-sm text-neutral-600">
-              홈페이지에서는 다른 이용자의 상세 예약 정보가 따로 보이지 않고, 내 예약만 별도로 확인할 수 있게 구성했습니다.
-            </div>
-            <div className="space-y-3">
-              {myReservations.length === 0 && (
-                <div className="rounded-2xl border border-dashed border-neutral-300 bg-neutral-50 px-4 py-5 text-sm text-neutral-500">
-                  현재 확인되는 내 예약이 없습니다.
-                </div>
               )}
-              {myReservations.map((item) => (
-                <div key={item.id} className="rounded-2xl border border-neutral-200 bg-neutral-50 p-4">
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    <div>
-                      <p className="font-semibold">{getSpaceName(item.spaceId)}</p>
-                      <p className="mt-1 text-sm text-neutral-600">
-                        {formatDate(item.date)} · {item.time} · {item.name}
-                      </p>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      <span className="rounded-full bg-white px-3 py-1 text-xs font-medium text-neutral-700">
-                        {item.status}
-                      </span>
-                      <button
-                        onClick={() => handleEdit(item.id)}
-                        className="rounded-full bg-neutral-900 px-3 py-1.5 text-xs font-semibold text-white"
-                      >
-                        수정
-                      </button>
-                      <button
-                        onClick={() => void handleDelete(item.id)}
-                        className="rounded-full border border-neutral-300 bg-white px-3 py-1.5 text-xs font-semibold text-neutral-700"
-                      >
-                        취소
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            </CardShell>
           </div>
 
-          {showAdminPanel && (
-            <div className="rounded-[28px] border border-emerald-200 bg-emerald-50/50 p-6 shadow-sm">
-              <div className="mb-5 flex items-end justify-between gap-4">
-                <div>
-                  <p className="text-sm font-semibold text-emerald-700">관리자 전용</p>
-                  <h2 className="mt-1 text-2xl font-bold tracking-tight">전체 예약 관리</h2>
-                </div>
-                <div className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-emerald-800">
-                  관리자 번호 확인 완료
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                {adminReservations.map((item) => (
-                  <div key={item.id} className="rounded-2xl border border-emerald-100 bg-white p-4">
-                    <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <div className="space-y-6">
+            <CardShell>
+              <SectionHead
+                step="공간 안내"
+                title="어떤 공간을 예약할 수 있나요?"
+                description="공간별 수용 인원과 성격을 보고 알맞은 회의실을 선택해 주세요."
+              />
+              <div className="grid gap-4">
+                {SPACES.map((space) => (
+                  <button
+                    key={space.id}
+                    type="button"
+                    onClick={() => setForm((prev) => ({ ...prev, spaceId: space.id }))}
+                    className={`rounded-2xl border p-4 text-left transition ${
+                      form.spaceId === space.id
+                        ? "border-emerald-500 bg-emerald-600 text-white shadow-md shadow-emerald-200"
+                        : "border-neutral-200 bg-neutral-50 hover:border-emerald-300"
+                    }`}
+                  >
+                    <div className="flex items-start justify-between gap-4">
                       <div>
-                        <p className="font-semibold">
-                          {getSpaceName(item.spaceId)} · {formatDate(item.date)} · {item.time}
+                        <p className="text-base font-semibold">{space.name}</p>
+                        <p className={`mt-1 text-sm ${form.spaceId === space.id ? "text-emerald-50" : "text-neutral-600"}`}>
+                          {space.desc}
                         </p>
+                      </div>
+                      <span className={`rounded-full px-3 py-1 text-xs font-semibold ${form.spaceId === space.id ? "bg-white text-emerald-700" : "bg-white text-neutral-700"}`}>
+                        {space.capacity}
+                      </span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </CardShell>
+
+            <CardShell>
+              <SectionHead
+                step="내 예약"
+                title="내가 신청한 예약만 보기"
+                description={formatPhone(activePhone)}
+              />
+              <div className="mb-4 rounded-2xl border border-dashed border-neutral-300 bg-neutral-50 px-4 py-4 text-sm text-neutral-600">
+                다른 이용자의 상세 예약 정보는 보이지 않고, 내 예약만 별도로 확인할 수 있습니다.
+              </div>
+              <div className="space-y-3">
+                {myReservations.length === 0 && (
+                  <div className="rounded-2xl border border-dashed border-neutral-300 bg-neutral-50 px-4 py-5 text-sm text-neutral-500">
+                    현재 확인되는 내 예약이 없습니다.
+                  </div>
+                )}
+                {myReservations.map((item) => (
+                  <div key={item.id} className="rounded-2xl border border-neutral-200 bg-neutral-50 p-4">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                      <div>
+                        <p className="font-semibold">{getSpaceName(item.spaceId)}</p>
                         <p className="mt-1 text-sm text-neutral-600">
-                          예약자 {item.name} · {formatPhone(normalizePhone(item.phone))}
+                          {formatDate(item.date)} · {item.time} · {item.name}
                         </p>
                       </div>
                       <div className="flex flex-wrap gap-2">
-                        <button
-                          onClick={() => handleEdit(item.id)}
-                          className="rounded-full bg-neutral-900 px-3 py-1.5 text-xs font-semibold text-white"
-                        >
-                          수정
-                        </button>
-                        <button
-                          onClick={() => void handleDelete(item.id)}
-                          className="rounded-full border border-neutral-300 bg-white px-3 py-1.5 text-xs font-semibold text-neutral-700"
-                        >
-                          삭제
-                        </button>
+                        <MiniTag>{item.status}</MiniTag>
+                        <MiniAction onClick={() => handleEdit(item.id)}>수정</MiniAction>
+                        <MiniGhost onClick={() => void handleDelete(item.id)}>취소</MiniGhost>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
-            </div>
-          )}
+            </CardShell>
+
+            {showAdminPanel && (
+              <CardShell className="border-emerald-200 bg-emerald-50/60">
+                <SectionHead
+                  step="관리자 전용"
+                  title="전체 예약 관리"
+                  description="전체 예약을 확인하고 수정 또는 삭제할 수 있습니다."
+                />
+                <div className="space-y-3">
+                  {adminReservations.map((item) => (
+                    <div key={item.id} className="rounded-2xl border border-emerald-100 bg-white p-4">
+                      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                        <div>
+                          <p className="font-semibold">
+                            {getSpaceName(item.spaceId)} · {formatDate(item.date)} · {item.time}
+                          </p>
+                          <p className="mt-1 text-sm text-neutral-600">
+                            예약자 {item.name} · {formatPhone(normalizePhone(item.phone))}
+                          </p>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          <MiniAction onClick={() => handleEdit(item.id)}>수정</MiniAction>
+                          <MiniGhost onClick={() => void handleDelete(item.id)}>삭제</MiniGhost>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardShell>
+            )}
+          </div>
         </div>
       </section>
     </div>
@@ -823,7 +753,6 @@ async function apiGet<T>(action: string, params?: Record<string, string>) {
   if (!response.ok) {
     throw new Error("API 요청에 실패했습니다.");
   }
-
   return (await response.json()) as T;
 }
 
@@ -841,6 +770,46 @@ async function apiPost<T>(payload: Record<string, unknown>) {
   }
 
   return (await response.json()) as T;
+}
+
+function CardShell({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  return <div className={`rounded-[28px] border border-neutral-200 bg-white p-5 shadow-sm sm:p-6 ${className}`}>{children}</div>;
+}
+
+function SectionHead({
+  step,
+  title,
+  description,
+  side,
+}: {
+  step: string;
+  title: string;
+  description: string;
+  side?: React.ReactNode;
+}) {
+  return (
+    <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+      <div>
+        <p className="text-sm font-semibold text-emerald-700">{step}</p>
+        <h2 className="mt-1 text-2xl font-black tracking-tight text-neutral-900">{title}</h2>
+        <p className="mt-2 text-sm leading-6 text-neutral-600">{description}</p>
+      </div>
+      {side ? side : null}
+    </div>
+  );
+}
+
+function StatusChip({ children }: { children: React.ReactNode }) {
+  return <div className="rounded-2xl bg-neutral-100 px-4 py-2 text-sm text-neutral-700">{children}</div>;
+}
+
+function QuickStat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-4 text-center">
+      <div className="text-xs font-medium text-neutral-500 sm:text-sm">{label}</div>
+      <div className="mt-1 text-xl font-black tracking-tight sm:text-2xl">{value}</div>
+    </div>
+  );
 }
 
 function Field({
@@ -863,32 +832,58 @@ function Field({
   );
 }
 
-function StatCard({
-  label,
-  value,
-  icon,
-}: {
-  label: string;
-  value: string;
-  icon: React.ReactNode;
-}) {
+function PrimaryButton({
+  children,
+  className = "",
+  ...props
+}: React.ButtonHTMLAttributes<HTMLButtonElement> & { children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl border border-neutral-200 bg-neutral-50 p-4">
-      <div className="flex items-center gap-2 text-sm text-neutral-500">
-        {icon}
-        {label}
-      </div>
-      <div className="mt-2 text-2xl font-bold tracking-tight">{value}</div>
-    </div>
+    <button
+      {...props}
+      className={`inline-flex min-h-[48px] items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-sm shadow-emerald-200 transition hover:bg-emerald-700 disabled:opacity-60 ${className}`}
+    >
+      {children}
+    </button>
   );
 }
 
-function Badge({ children }: { children: React.ReactNode }) {
+function SecondaryButton({
+  children,
+  className = "",
+  ...props
+}: React.ButtonHTMLAttributes<HTMLButtonElement> & { children: React.ReactNode }) {
   return (
-    <span className="rounded-full border border-neutral-200 bg-white px-3 py-1.5 text-sm font-medium">
+    <button
+      {...props}
+      className={`inline-flex min-h-[48px] items-center justify-center gap-2 rounded-2xl border border-neutral-300 bg-white px-5 py-3 text-sm font-semibold text-neutral-800 transition hover:border-emerald-400 hover:text-emerald-700 disabled:opacity-60 ${className}`}
+    >
       {children}
-    </span>
+    </button>
   );
+}
+
+function MiniAction({ children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement> & { children: React.ReactNode }) {
+  return (
+    <button {...props} className="rounded-full bg-neutral-900 px-3 py-1.5 text-xs font-semibold text-white">
+      {children}
+    </button>
+  );
+}
+
+function MiniGhost({ children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement> & { children: React.ReactNode }) {
+  return (
+    <button {...props} className="rounded-full border border-neutral-300 bg-white px-3 py-1.5 text-xs font-semibold text-neutral-700">
+      {children}
+    </button>
+  );
+}
+
+function MiniTag({ children }: { children: React.ReactNode }) {
+  return <span className="rounded-full bg-white px-3 py-1 text-xs font-medium text-emerald-700">{children}</span>;
+}
+
+function Pill({ children }: { children: React.ReactNode }) {
+  return <span className="rounded-full border border-neutral-200 bg-white px-3 py-1.5 text-xs font-semibold text-neutral-700 sm:text-sm">{children}</span>;
 }
 
 function formatDate(dateString: string) {
