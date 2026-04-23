@@ -360,7 +360,7 @@ export default function ReservationLandingPage() {
         <header className="text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/8 px-4 py-1.5 text-sm font-medium text-emerald-200 backdrop-blur">
             <ShieldCheck className="h-4 w-4" />
-            청년동 회의실 예약
+            데모데이 모임 장소 예약
           </div>
 
           <h1 className="mt-6 text-4xl font-bold leading-tight tracking-tight sm:text-5xl md:text-6xl">
