@@ -376,8 +376,8 @@ export default function ReservationLandingPage() {
           </p>
 
           <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Pill icon={<CalendarDays className="h-4 w-4" />}>1시간 단위 예약</Pill>
-            <Pill icon={<MapPin className="h-4 w-4" />}>회의실 3개 운영</Pill>
+            <Pill icon={<CalendarDays className="h-4 w-4" />}>1시간 예약 가능</Pill>
+            <Pill icon={<MapPin className="h-4 w-4" />}>회의실 1,2,3 운영</Pill>
             <Pill icon={<MoonStar className="h-4 w-4" />}>선착순 예약 필수</Pill>
           </div>
         </header>
@@ -414,7 +414,7 @@ export default function ReservationLandingPage() {
 
                 <GhostButton type="button" onClick={() => void loadReservations()} disabled={isLoadingReservations}>
                   {isLoadingReservations ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-                  예약 현황 불러오기
+                  예약 현황 확인하기
                 </GhostButton>
               </div>
 
