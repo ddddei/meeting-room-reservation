@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 
 const API_BASE_URL =
-  "https://script.google.com/macros/s/AKfycbynuOiLCCfhGo7jDpqlhDM2S0CXEujm78uR1x5-CNVofUOgoEM_MpPEqVLgm_abOIO8/exec";
+  "https://script.google.com/macros/s/AKfycbz1EGc5a87kiCyLGHnvY77Mf0TLjvK92unfjlY1tg9zgvMaEF6yq0WxLBWAT_M5sV8V/exec";
 
 const ADMIN_PHONE = "01029733421";
 
@@ -664,6 +664,7 @@ async function apiGet<T>(action: string, params?: Record<string, string>) {
   if (!response.ok) {
     throw new Error("API 요청에 실패했습니다.");
   }
+
   return (await response.json()) as T;
 }
 
