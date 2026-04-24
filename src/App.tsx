@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 
 const API_BASE_URL =
-  "https://script.google.com/macros/s/AKfycbyi8NwCyLfh5Huv3LCSRBCX_EBBdmxX5Yp3oJZkHvsa8F2KerpHTDpqmojzAK-HAPU/exec";
+  "https://script.google.com/macros/s/AKfycbxocaUnH0ArQC0sV3pYKPvq4CQeFl4MgvWDajq8zv5HSTgzDpumLedkwiuFo0YO4y-T/exec";
 
 const ADMIN_PHONES = ["01029733421", "01049084901"];
 
@@ -365,7 +365,7 @@ export default function ReservationLandingPage() {
             데모데이 모임 장소 예약
           </div>
 
-          <h1 className="mt-6 text-4xl font-bold leading-tight tracking-tight sm:text-5xl md:text-6xl">
+          <h1 className="mt-6 text-4xl font-bold leading-[1.18] tracking-tight sm:text-5xl md:text-6xl md:leading-[1.15]">
             필요한 시간과 필요한 공간만
             <br />
             빠르게 예약하세요
@@ -378,8 +378,10 @@ export default function ReservationLandingPage() {
           </p>
 
           <div className="mx-auto mt-4 max-w-2xl rounded-2xl border border-amber-300/20 bg-amber-300/10 px-4 py-3 text-sm leading-6 text-amber-100">
-            예약 취소는 본인 예약 내역에서 운영 기간 중 1회만 직접 가능합니다.
-            이후 취소가 필요한 경우 {CONTACT_PHONE}로 문의해 주세요.
+           <p>예약 취소는 본인 예약 내역에서 운영 기간 중 1회만 직접 가능합니다.</p>
+           <p>
+             이후 취소가 필요한 경우 <strong className="font-bold text-amber-50">{CONTACT_PHONE}</strong>로 문의해 주세요.
+           </p>
           </div>
 
           <div className="mt-6 flex flex-wrap justify-center gap-3">
