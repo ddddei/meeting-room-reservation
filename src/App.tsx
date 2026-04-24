@@ -316,14 +316,15 @@ export default function ReservationLandingPage() {
   }
 
   async function handleDelete(id: string) {
-    if (!isAdmin) {
-      setMessage(`예약 취소는 관리자에게 문의해 주세요. 문의: ${CONTACT_PHONE}`);
-      return;
-    }
-
     const target = reservations.find((item) => item.id === id);
     if (!target) {
       setMessage("예약 정보를 찾지 못했습니다.");
+      return;
+    }
+
+    const targetPhone = normalizePhone(target.phone);
+    if (!isAdmin && targetPhone !== activePhone) {
+      setMessage("본인 예약만 취소할 수 있습니다.");
       return;
     }
 
@@ -343,6 +344,7 @@ export default function ReservationLandingPage() {
       if (selectedReservationId === id) {
         setSelectedReservationId(null);
       }
+
       setMessage(data.message || "예약이 취소되었습니다.");
       await loadReservations();
     } catch (error) {
@@ -376,8 +378,8 @@ export default function ReservationLandingPage() {
           </p>
 
           <div className="mx-auto mt-4 max-w-2xl rounded-2xl border border-amber-300/20 bg-amber-300/10 px-4 py-3 text-sm leading-6 text-amber-100">
-            예약 취소는 관리자 확인 후 처리됩니다. 취소 문의는 {CONTACT_PHONE}로 연락해 주세요.
-            취소 처리 중 원하는 시간대가 마감될 수 있으니 신청 시 신중하게 예약해 주세요.
+            예약 취소는 본인 예약 내역에서 운영 기간 중 1회만 직접 가능합니다.
+            이후 취소가 필요한 경우 {CONTACT_PHONE}로 문의해 주세요.
           </div>
 
           <div className="mt-6 flex flex-wrap justify-center gap-3">
@@ -437,7 +439,7 @@ export default function ReservationLandingPage() {
               subtitle={currentSpace ? `${currentSpace.name} · ${currentSpace.capacity}` : undefined}
             >
               <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm leading-6 text-white/70">
-                예약 취소는 즉시 반영되지 않을 수 있으며, 처리 중 원하는 시간대가 마감될 수 있습니다.
+                본인 예약 취소는 운영 기간 중 1회만 가능합니다.
                 반드시 이용 가능한 시간을 신중히 확인한 뒤 신청해 주세요.
               </div>
 
@@ -581,6 +583,7 @@ export default function ReservationLandingPage() {
                           found && isMine && !showAdminPanel ? (
                             <div className="flex flex-wrap gap-2">
                               <MiniButton onClick={() => handleEdit(found.id)}>수정</MiniButton>
+                              <MiniGhostButton onClick={() => void handleDelete(found.id)}>취소</MiniGhostButton>
                             </div>
                           ) : found && showAdminPanel ? (
                             <div className="flex flex-wrap gap-2">
@@ -598,7 +601,7 @@ export default function ReservationLandingPage() {
 
             <GlassCard title="내 예약">
               <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm leading-6 text-white/65">
-                예약 취소가 필요한 경우 {CONTACT_PHONE}로 문의해 주세요.
+                본인 예약 취소는 운영 기간 중 1회만 가능합니다. 이후 취소가 필요한 경우 {CONTACT_PHONE}로 문의해 주세요.
               </div>
 
               {myReservations.length === 0 ? (
@@ -619,6 +622,7 @@ export default function ReservationLandingPage() {
                         <div className="flex flex-wrap gap-2">
                           <Tag>{item.status}</Tag>
                           <MiniButton onClick={() => handleEdit(item.id)}>수정</MiniButton>
+                          <MiniGhostButton onClick={() => void handleDelete(item.id)}>취소</MiniGhostButton>
                         </div>
                       </div>
                     </div>
