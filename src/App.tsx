@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 
 const API_BASE_URL =
-  "https://script.google.com/macros/s/AKfycbwZeQdQ616tl-URvR6J6ANPqNU41J7yzcbAHTSuSIleOuke9gnCVR7HmEoWBVcHOj0T/exec";
+  "https://script.google.com/macros/s/AKfycbyi8NwCyLfh5Huv3LCSRBCX_EBBdmxX5Yp3oJZkHvsa8F2KerpHTDpqmojzAK-HAPU/exec";
 
 const ADMIN_PHONES = ["01029733421", "01049084901"];
 
