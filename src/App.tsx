@@ -11,19 +11,20 @@ import {
 } from "lucide-react";
 
 const API_BASE_URL =
-  "https://script.google.com/macros/s/AKfycbz1EGc5a87kiCyLGHnvY77Mf0TLjvK92unfjlY1tg9zgvMaEF6yq0WxLBWAT_M5sV8V/exec";
+  "https://script.google.com/macros/s/AKfycbwZeQdQ616tl-URvR6J6ANPqNU41J7yzcbAHTSuSIleOuke9gnCVR7HmEoWBVcHOj0T/exec";
 
-const ADMIN_PHONE = "01029733421";
+const ADMIN_PHONES = ["01029733421", "01049084901"];
+
+const CONTACT_PHONE = "02-2066-8134";
 
 const SPACES = [
   { id: "room-1", name: "회의실 1", capacity: "최대 12명", desc: "팀 회의, 교육, 모임 운영에 적합" },
   { id: "room-2", name: "회의실 2", capacity: "최대 8명", desc: "소규모 회의, 상담, 인터뷰에 적합" },
-  { id: "room-3", name: "회의실 3", capacity: "최대 8명", desc: "집중 회의, 스터디, 간단한 워크숍에 적합" },
+  { id: "room-3", name: "회의실 3", capacity: "최대 8명", desc: "소규모 회의, 스터디, 간단한 워크숍에 적합" },
 ] as const;
 
 const DATES = [
   "2026-05-10",
-  "2026-05-11",
   "2026-05-12",
   "2026-05-13",
   "2026-05-14",
@@ -116,7 +117,7 @@ export default function ReservationLandingPage() {
 
   const normalizedPhone = normalizePhone(form.phone);
   const activePhone = normalizePhone(activeUser.phone);
-  const isAdmin = activeUser.isAdmin || activePhone === ADMIN_PHONE;
+  const isAdmin = activeUser.isAdmin || ADMIN_PHONES.includes(activePhone);
   const showAdminPanel = viewMode === "admin" && isAdmin;
 
   const dateSlots = useMemo(() => getTimeSlotsForDate(form.date), [form.date]);
@@ -204,7 +205,7 @@ export default function ReservationLandingPage() {
         return;
       }
 
-      const adminFlag = Boolean(data.isAdmin) || normalizedPhone === ADMIN_PHONE;
+      const adminFlag = Boolean(data.isAdmin) || ADMIN_PHONES.includes(normalizedPhone);
       setActiveUser({
         name: form.name.trim(),
         phone: normalizedPhone,
@@ -315,15 +316,14 @@ export default function ReservationLandingPage() {
   }
 
   async function handleDelete(id: string) {
-    const target = reservations.find((item) => item.id === id);
-    if (!target) {
-      setMessage("예약 정보를 찾지 못했습니다.");
+    if (!isAdmin) {
+      setMessage(`예약 취소는 관리자에게 문의해 주세요. 문의: ${CONTACT_PHONE}`);
       return;
     }
 
-    const targetPhone = normalizePhone(target.phone);
-    if (!isAdmin && targetPhone !== activePhone) {
-      setMessage("본인 예약만 삭제할 수 있습니다.");
+    const target = reservations.find((item) => item.id === id);
+    if (!target) {
+      setMessage("예약 정보를 찾지 못했습니다.");
       return;
     }
 
@@ -370,10 +370,15 @@ export default function ReservationLandingPage() {
           </h1>
 
           <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-white/70 sm:text-base">
-            5월 10일 ~ 5월 15일 운영 · 일요일 10:00~17:00 · 월~금 10:00~21:00
+            5월 10일 ~ 5월 15일 운영 · 일요일 10:00~17:00 · 화–금요일 10:00~21:00
             <br />
             운영 기간 중 1인 1회만 예약 가능합니다.
           </p>
+
+          <div className="mx-auto mt-4 max-w-2xl rounded-2xl border border-amber-300/20 bg-amber-300/10 px-4 py-3 text-sm leading-6 text-amber-100">
+            예약 취소는 관리자 확인 후 처리됩니다. 취소 문의는 {CONTACT_PHONE}로 연락해 주세요.
+            취소 처리 중 원하는 시간대가 마감될 수 있으니 신청 시 신중하게 예약해 주세요.
+          </div>
 
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Pill icon={<CalendarDays className="h-4 w-4" />}>1시간 예약 가능</Pill>
@@ -431,6 +436,11 @@ export default function ReservationLandingPage() {
               title="예약 신청"
               subtitle={currentSpace ? `${currentSpace.name} · ${currentSpace.capacity}` : undefined}
             >
+              <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm leading-6 text-white/70">
+                예약 취소는 즉시 반영되지 않을 수 있으며, 처리 중 원하는 시간대가 마감될 수 있습니다.
+                반드시 이용 가능한 시간을 신중히 확인한 뒤 신청해 주세요.
+              </div>
+
               <form onSubmit={(e) => void handleSubmit(e)} className="space-y-4">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Field label="공간 선택" icon={<MapPin className="h-4 w-4" />}>
@@ -571,7 +581,6 @@ export default function ReservationLandingPage() {
                           found && isMine && !showAdminPanel ? (
                             <div className="flex flex-wrap gap-2">
                               <MiniButton onClick={() => handleEdit(found.id)}>수정</MiniButton>
-                              <MiniGhostButton onClick={() => void handleDelete(found.id)}>취소</MiniGhostButton>
                             </div>
                           ) : found && showAdminPanel ? (
                             <div className="flex flex-wrap gap-2">
@@ -588,6 +597,10 @@ export default function ReservationLandingPage() {
             </GlassCard>
 
             <GlassCard title="내 예약">
+              <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm leading-6 text-white/65">
+                예약 취소가 필요한 경우 {CONTACT_PHONE}로 문의해 주세요.
+              </div>
+
               {myReservations.length === 0 ? (
                 <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-5 text-sm text-white/65">
                   현재 확인되는 예약이 없습니다.
@@ -606,7 +619,6 @@ export default function ReservationLandingPage() {
                         <div className="flex flex-wrap gap-2">
                           <Tag>{item.status}</Tag>
                           <MiniButton onClick={() => handleEdit(item.id)}>수정</MiniButton>
-                          <MiniGhostButton onClick={() => void handleDelete(item.id)}>취소</MiniGhostButton>
                         </div>
                       </div>
                     </div>
@@ -923,8 +935,9 @@ const DEV_TEST_CASES = [
   normalizePhone("010-8924-7928") === "01089247928",
   maskName("박지은") === "박*은",
   formatPhone("01029733421") === "010-2973-3421",
+  formatPhone("01049084901") === "010-4908-4901",
   getTimeSlotsForDate("2026-05-10").length === 7,
-  getTimeSlotsForDate("2026-05-11").length === 11,
+  getTimeSlotsForDate("2026-05-12").length === 11,
   getSpaceName("room-2") === "회의실 2",
 ];
 
