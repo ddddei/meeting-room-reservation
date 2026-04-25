@@ -374,7 +374,7 @@ export default function ReservationLandingPage() {
           <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-white/70 sm:text-base">
             5월 17일 ~ 5월 22일 운영 · 일요일 10:00~17:00 · 화–금요일 10:00~21:00 · 월요일 휴관
             <br />
-             운영 기간 중 1인 1회만 예약 가능합니다.
+             운영 기간 중 1인 1회(1시간)만 예약 가능합니다.
             </p>
 
           <div className="mx-auto mt-4 max-w-2xl rounded-2xl border border-amber-300/20 bg-amber-300/10 px-4 py-3 text-sm leading-6 text-amber-100">
