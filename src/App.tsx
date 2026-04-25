@@ -441,8 +441,8 @@ export default function ReservationLandingPage() {
               subtitle={currentSpace ? `${currentSpace.name} · ${currentSpace.capacity}` : undefined}
             >
               <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm leading-6 text-white/70">
-                본인 예약 취소는 운영 기간 중 1회만 가능합니다.
-                반드시 이용 가능한 시간을 신중히 확인한 뒤 신청해 주세요.
+               <p>본인 예약 취소는 운영 기간 중 1회만 가능합니다.</p> 
+               <p className="mt-1">반드시 이용 가능한 시간을 신중히 확인한 뒤 신청해 주세요.</p>
               </div>
 
               <form onSubmit={(e) => void handleSubmit(e)} className="space-y-4">
