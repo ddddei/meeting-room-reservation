@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 
 const API_BASE_URL =
-  "https://script.google.com/macros/s/AKfycbxocaUnH0ArQC0sV3pYKPvq4CQeFl4MgvWDajq8zv5HSTgzDpumLedkwiuFo0YO4y-T/exec";
+  "https://script.google.com/macros/s/AKfycbwbZxXWK8KIw1ERaFm6B3zrV1ZSpfyRO1T7X51N0OpFwGobps4UIm8t9ROOIDao5HZ_/exec";
 
 const ADMIN_PHONES = ["01029733421", "01049084901"];
 
@@ -24,11 +24,11 @@ const SPACES = [
 ] as const;
 
 const DATES = [
-  "2026-05-10",
-  "2026-05-12",
-  "2026-05-13",
-  "2026-05-14",
-  "2026-05-15",
+  "2026-05-17",
+  "2026-05-19",
+  "2026-05-20",
+  "2026-05-21",
+  "2026-05-22",
 ] as const;
 
 const SUNDAY_SLOTS = [
@@ -372,10 +372,10 @@ export default function ReservationLandingPage() {
           </h1>
 
           <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-white/70 sm:text-base">
-            5월 10일 ~ 5월 15일 운영 · 일요일 10:00~17:00 · 화–금요일 10:00~21:00
+            5월 17일 ~ 5월 22일 운영 · 일요일 10:00~17:00 · 화–금요일 10:00~21:00
             <br />
-            운영 기간 중 1인 1회만 예약 가능합니다.
-          </p>
+             운영 기간 중 1인 1회만 예약 가능합니다.
+            </p>
 
           <div className="mx-auto mt-4 max-w-2xl rounded-2xl border border-amber-300/20 bg-amber-300/10 px-4 py-3 text-sm leading-6 text-amber-100">
            <p>예약 취소는 본인 예약 내역에서 운영 기간 중 1회만 직접 가능합니다.</p>
@@ -942,8 +942,8 @@ const DEV_TEST_CASES = [
   maskName("박지은") === "박*은",
   formatPhone("01029733421") === "010-2973-3421",
   formatPhone("01049084901") === "010-4908-4901",
-  getTimeSlotsForDate("2026-05-10").length === 7,
-  getTimeSlotsForDate("2026-05-12").length === 11,
+  getTimeSlotsForDate("2026-05-17").length === 7,
+  getTimeSlotsForDate("2026-05-19").length === 11,
   getSpaceName("room-2") === "회의실 2",
 ];
 
